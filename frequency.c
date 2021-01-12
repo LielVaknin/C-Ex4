@@ -146,7 +146,7 @@ void free_all(Node* node){
 
 
 int main(int argc, char *argv[]){
-    int capacity = 3;
+    int capacity = 256;
     char *str = NULL;
     str = (char*)calloc(capacity, sizeof(char));
      if(str == NULL){
