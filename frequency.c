@@ -60,7 +60,7 @@ int search_word(Node *node, char *word){
     if(node){
         for(int i = 0; i < NUM_LETTERS; i++){
             c = *(p_word);
-            word ++;
+            //word ++;
             if(node->children[i] != NULL && node->children[i]->letter == c){
                     if (*(p_word) == '\0'){
                         node->children[i]->count = node->children[i]->count + 1;
