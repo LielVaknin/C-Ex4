@@ -40,18 +40,14 @@ void split_string(char *str, char *temp_arr, int w_parameter){
         printf("Failed allocating memory");
         exit(1);
     }
-     for (int i = 0; i < NUM_LETTERS; i++){
-        root->children[i] = NULL;
-    }
-    root->count = 0;
-    char delim[] = {" \t\n\r"};
-    char *p = strtok(str, delim);
+    char *p = NULL;
+    p = strtok(str, " \t\n\r");
     while(p != NULL){
         int ans = search_word(root, p); 
         if(!ans){
             insert(root, p);
         }
-        p = strtok(NULL, delim);
+        p = strtok(NULL, " \t\n\r");
     }
    print_all(root, temp_arr, 0, w_parameter);
    free_all(root);
@@ -59,16 +55,18 @@ void split_string(char *str, char *temp_arr, int w_parameter){
 
 //Returns 1 if a word exists in the tree, 0 otherwise
 int search_word(Node *node, char *word){
+    char *p_word = word;
+    char c = 'c';
     if(node){
         for(int i = 0; i < NUM_LETTERS; i++){
-            char c = *(word);
+            c = *(p_word);
             word ++;
             if(node->children[i] != NULL && node->children[i]->letter == c){
-                    if (*(word) == '\0'){
+                    if (*(p_word) == '\0'){
                         node->children[i]->count = node->children[i]->count + 1;
                         return 1;
                     }
-                    return search_word(node->children[i], word);
+                    return search_word(node->children[i], p_word);
                 }
             }
         }
@@ -77,7 +75,7 @@ int search_word(Node *node, char *word){
 
 //If word does not exist in the tree, this function inserts it
 void insert(Node *node, char *word){
-    int index;
+    int index = 0;
     if(node){
         index = word[0]-'a';
         if (node->children[index]){ // Letter exists
@@ -146,14 +144,14 @@ void free_all(Node* node){
 
 
 int main(int argc, char *argv[]){
-    int capacity = 256;
+    int capacity = 1;
     char *str = NULL;
-    str = (char*)calloc(capacity, sizeof(char));
+    str = (char*)calloc(capacity+1, sizeof(char));
      if(str == NULL){
         printf("Failed allocating memory");
         exit(1);
     }
-    char ch;
+    char ch = '\0';
     int flag = 1;
     int i = 0;
     int w_parameter = 0;
@@ -177,12 +175,13 @@ int main(int argc, char *argv[]){
                 }
             }
             if (ch==' ' || ch == '\n' || ch == '\t' || isalpha(ch)){
-            str[i] = tolower(ch);
-            i++;
+                str[i] = tolower(ch);
+                i++;
             }
         }
     }
-    // char temp_arr[i];
+
+    str[i] = '\0';
     char *temp_arr = NULL;
     temp_arr = (char*)calloc(i, sizeof(char));
     if (!temp_arr){
